@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,11 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.css" rel="stylesheet">
     <title>Filmes</title>
 </head>
-<body>
+<body onload="obterFilmes()"> <!-- TODA VEZ Q A PAGINA FOR ABERTAR ELE IRA EXECUTAR A FUNÇÃO obterFilmes -->
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <table class="table table-strip table-hover text-center">
+                <table class="table table-strip table-hover text-center filmes">
                     <thead>
                         <tr>
                             <th>Título</th>
@@ -25,6 +25,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

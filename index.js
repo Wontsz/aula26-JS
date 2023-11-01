@@ -1,10 +1,13 @@
 const express = require("express")
-const req = require("express/lib/request")
+const cors = require("cors")
+//const req = require("express/lib/request")
 const app = express()
 
 //string de conexãp protoclo://servidor:porta/acessos               (req, res, next) req = requisição res = resposta next = encadeamento (nn obrigatorio)
 
 app.use(express.json())
+app.use(cors())
+
 
 let filmes = [
     {
@@ -23,16 +26,16 @@ app.get("/oi", (req, res) => {res.send('oi')})
 app.get("/filmes", (req, res) => {res.send(filmes)})    
 
 //acesso para requisição http-post /filmes. ou seja, vamos inserir um novo filme na !lista em memória!
-app.post ("/filmes", (res, res) => {
+app.post ("/filmes", (req, res) => {
     //obter dados que serão inseridos
     const titulo = req.body.titulo
     const sinopse = req.body.sinopse
     //montar o objeto json que sera inserido
     const filme = {titulo: titulo, sinopse:sinopse}
-    //inserir o novo filme no vetor fillme
+    //inserir o novo filme no vetor filme
     filmes.push(filme)
     //só para conferir (nn é necessario)
     res.send(filmes)
 })
-app.listen(3000, () => console.log("app up & runnin"))
+app.listen(3000, () => console.log("app up & running"))
 
