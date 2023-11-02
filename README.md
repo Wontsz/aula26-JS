@@ -1,3 +1,3 @@
-# aula26-JS
+# Exc-full-stack
 Aula de Front-End 26/10
-Projeto full stack
+Exercio em aula full-stack
