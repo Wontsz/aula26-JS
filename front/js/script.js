@@ -17,3 +17,37 @@ async function obterFilmes(){ //async e await
         celulaSinopse.innerHTML = filme.sinopse
     }
 }
+
+async function cadastrarFilmes(){
+    const URLcompleta = `${protocolo}${host}${filmesEndpoint}`
+    let tituloInput = document.querySelector("#tituloInput") //variavel tituloInput
+    let sinopseInput = document.querySelector("#sinopseInput") //variavel sinopseInput
+    let titulo = tituloInput.value //pega o valor digitado do titulo
+    let sinopse = sinopseInput.value //pega o valor digitado da sinopse
+    tituloInput.value = ""
+    sinopseInput.value = ""
+    if (titulo && sinopse){
+        const filmes = (await axios.post(URLcompleta, {titulo, sinopse})).data
+
+        console.log(filmes)
+        const tabela = document.querySelector(".filmes")
+        const corpoTabela = tabela.getElementsByTagName("tbody")[0]
+        tabela.innerHTML = ""
+        for(let filme of filmes){ //para cada filme na minha lista de filmes
+            let linha = corpoTabela.insertRow(0)
+            let celulaTitulo = linha.insertCell(0)
+            let celulaSinopse = linha.insertCell(1)
+            celulaTitulo.innerHTML = filme.titulo
+            celulaSinopse.innerHTML = filme.sinopse
+        }
+    }
+    else{
+        let alert = document.querySelector(".alert")
+        alert.classList.add("show")
+        alert.classList.remove("d-none")
+        setTimeout(() => {
+            alert.classList.add('d-none')
+            alert.classList.remove("show")
+        }, 2000)
+    }
+}
