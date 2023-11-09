@@ -18,7 +18,7 @@ async function obterFilmes(){ //async e await
     }
 }
 
-async function cadastrarFilmes(){
+async function cadastrarFilme(){
     const URLcompleta = `${protocolo}${host}${filmesEndpoint}`
     let tituloInput = document.querySelector("#tituloInput") //variavel tituloInput
     let sinopseInput = document.querySelector("#sinopseInput") //variavel sinopseInput
@@ -32,7 +32,7 @@ async function cadastrarFilmes(){
         console.log(filmes)
         const tabela = document.querySelector(".filmes")
         const corpoTabela = tabela.getElementsByTagName("tbody")[0]
-        tabela.innerHTML = ""
+        corpoTabela.innerHTML = ""
         for(let filme of filmes){ //para cada filme na minha lista de filmes
             let linha = corpoTabela.insertRow(0)
             let celulaTitulo = linha.insertCell(0)
