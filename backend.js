@@ -1,9 +1,12 @@
 //string de conexão
 // mongodb+srv://wonts:1234@cluster0.d0bocki.mongodb.net/?retryWrites=true&w=majority
-
-const express = require("express")
-const cors = require("cors")
+//imports
+const express = require('express')
+const cors = require('cors')
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
+const  bcrypt = require('bcrypt')
+const { response } = require('express')
 //const req = require("express/lib/request")
 const app = express()
 
@@ -12,18 +15,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-
-let filmes = [
-    {
-    titulo: "Forrest Gump - O Contador de Histórias",
-    sinopse: "Quarenta anos da história dos Estados Unidos, vistos pelos olhos de Forrest Gump (Tom Hanks),um rapaz com QI abaixo da média e boas intenções."
-    },
-    {
-    titulo: "Um Sonho de Liberdade",
-    sinopse: "Em 1946, Andy Dufresne (Tim Robbins), um jovem e bem sucedido banqueiro, tem a sua vida radicalmente modificada ao ser condenado por um crime que nunca cometeu, o homicídio de sua esposa e do amante dela"
-    }
-]
-
+// npm install --force mongoose-unique-validator (impede q tenha logins repetidos) --force (versao inferior)
 async function conectarMongodb(){
     await mongoose.connect(`mongodb+srv://wonts:1234@cluster0.d0bocki.mongodb.net/?retryWrites=true&w=majority`)
 }
@@ -32,6 +24,13 @@ const Filme = mongoose.model("Filme", mongoose.Schema({
     titulo: {type: String},                                                                                                                                                                                                                                                                                                                                             
     sinopse: {type: String}
 }))
+
+const usuarioSchema = mongoose.Schema({//validar o login
+    login: ({type: String, unique: true, require: true}),
+    senha: ({type: String, require: true})
+}) 
+usuarioSchema.plugin(uniqueValidator)
+const Usuario = mongoose.model("Usuario:", usuarioSchema)
 
 //acesso para requisção http-get /oi
 app.get("/oi", (req, res) => {res.send('oi')})
@@ -55,6 +54,23 @@ app.post ("/filmes", async (req, res) => { //nn é mais uma requisição local
     const filmes = await Filme.find() //variavle local que vai buscar la no banco
     //só para conferir (nn é necessario)
     res.json(filmes)
+})
+
+//end point login
+app.post('/signup', async (req, res) => {
+    try{
+        const login = req.body.login
+        const senha = req.body.senha
+        const criptografada = await bcrypt.hash(senha, 50)
+        const usuario = new Usuario({login: login, senha: criptografada})
+        const respotaMongo = await usuario.save()
+        console.log(respotaMongo)
+        res.status(201).end()
+    }
+    catch(e){
+        console.log(e)
+        res.status(409).end()
+    }
 })
 
 app.listen(3000, () => {
